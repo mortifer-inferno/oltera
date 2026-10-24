@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#232323">
+<title>Oltera admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#232323;--panel:#2b2b2b;--raise:#333;--line:#464644;--ink:#f4f4f1;--mute:#a5a5a0;--err:#ffb3a7;--ok:#bfe3c4;
+  --f:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+html{height:100%;background:var(--bg)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--f);padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+[hidden]{display:none!important}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.vh{position:absolute;left:-9999px}
+.btn{background:transparent;border:1px solid var(--line);border-radius:4px;padding:.55rem 1rem;cursor:pointer;transition:background .2s,border-color .2s}
+.btn:hover{border-color:var(--ink)}
+.btn.solid{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.btn.solid:hover{background:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+label{display:block;font-size:.9rem;color:var(--mute);margin-bottom:.35rem}
+input,select{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:.7rem .8rem}
+input:focus,select:focus{border-color:var(--ink);outline:none}
+select{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--mute) 50%),linear-gradient(135deg,var(--mute) 50%,transparent 50%);background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:2rem}
+.gate{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:3rem;padding:clamp(1.5rem,5vw,5rem);max-width:1200px;margin:0 auto}
+.gate-mark{display:flex;flex-direction:column;align-items:flex-start;gap:1.5rem}
+.gate-mark svg{width:min(100%,380px);height:auto;fill:none;stroke:var(--ink);stroke-width:1.6}
+.gate-mark svg *{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.6s cubic-bezier(.65,0,.35,1) forwards}
+.gate-mark svg *:nth-child(2){animation-delay:.15s}.gate-mark svg *:nth-child(3){animation-delay:.3s}.gate-mark svg *:nth-child(4){animation-delay:.45s}.gate-mark svg *:nth-child(5){animation-delay:.6s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.gate-mark b{font-weight:800;font-size:clamp(2rem,5vw,3.4rem);letter-spacing:.18em;line-height:1}
+.gate-mark span{color:var(--mute);letter-spacing:.12em}
+.gate form{max-width:420px;width:100%}
+.gate h1{font-size:clamp(1.8rem,3.4vw,2.5rem);line-height:1.1;margin:0 0 .6rem;font-weight:800}
+.gate p.s{color:var(--mute);margin:0 0 1.6rem}
+.gate .row{margin-bottom:1.1rem}
+.pw{position:relative}
+.pw button{position:absolute;right:.4rem;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--mute);cursor:pointer;padding:.4rem .6rem}
+.pw button:hover{color:var(--ink)}
+.msg{min-height:1.4rem;margin:.9rem 0 0;font-size:.95rem}
+.msg.err{color:var(--err)}.msg.ok{color:var(--ok)}
+.help{margin-top:1.4rem;color:var(--mute);font-size:.88rem}.help summary{cursor:pointer}.help p{margin:.6rem 0 0}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:1rem;padding:.9rem clamp(1rem,4vw,3rem);flex-wrap:wrap}
+.top .brand{font-weight:800;letter-spacing:.18em;margin-right:auto}
+.top .brand small{font-weight:400;letter-spacing:0;color:var(--mute);margin-left:.8rem}
+.top .live{color:var(--mute);font-size:.88rem}
+.wrap{padding:2rem clamp(1rem,4vw,3rem) 4rem;max-width:1400px;margin:0 auto}
+.tabs{display:flex;gap:2rem;border-bottom:1px solid var(--line);margin-bottom:0}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:.4rem 0 .8rem;cursor:pointer;color:var(--mute);font-weight:600;font-size:1.05rem}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--ink)}
+.tabs em{font-style:normal;font-weight:400;margin-left:.4rem;color:var(--mute)}
+.figs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+.fig{padding:1.4rem 1.2rem 1.4rem 0;min-width:0}
+.fig+.fig{padding-left:1.4rem;border-left:1px solid var(--line)}
+.fig b{display:block;font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;line-height:1;letter-spacing:-.02em}
+.fig span{color:var(--mute);font-size:.92rem}
+.fig b.sm{font-size:clamp(1.3rem,2.4vw,1.9rem);padding:.45rem 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:3rem;margin-top:2rem;align-items:start}
+.tools{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1rem}
+.tools .grow{flex:1 1 220px}.tools .sel{flex:0 1 190px}
+.count{color:var(--mute);font-size:.9rem;margin:0 0 .6rem}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{text-align:left;padding:.85rem 1rem;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-weight:600;color:var(--mute);font-size:.88rem;background:var(--panel);white-space:nowrap}
+th button{background:none;border:0;padding:0;font-weight:600;color:inherit;cursor:pointer}
+th button:hover{color:var(--ink)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--panel)}
+td.when{white-space:nowrap;color:var(--mute);font-size:.92rem}
+td .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--ink);margin-right:.55rem;vertical-align:middle}
+td.act{white-space:nowrap;text-align:right}
+td.act a,td.act button{background:none;border:0;color:var(--mute);cursor:pointer;padding:.2rem .5rem;text-decoration:underline;text-underline-offset:3px;font-size:.9rem}
+td.act a:hover,td.act button:hover{color:var(--ink)}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:3px;padding:.05rem .5rem;font-size:.85rem;white-space:nowrap}
+.dim{color:var(--mute)}
+.empty{padding:2.5rem 1rem;text-align:center;color:var(--mute)}
+.side h2{font-size:1.1rem;margin:0 0 1rem;font-weight:600}
+.side h2+div+h2{margin-top:2rem}
+.bar{display:grid;grid-template-columns:1fr auto;gap:.2rem .8rem;margin-bottom:.9rem;font-size:.92rem;cursor:pointer;background:none;border:0;width:100%;text-align:left;padding:0}
+.bar.plain{cursor:default}
+.bar i{grid-column:1/-1;display:block;height:4px;background:var(--raise);border-radius:2px;overflow:hidden}
+.bar i u{display:block;height:100%;background:var(--ink);transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.bar:not(.plain):hover span{text-decoration:underline;text-underline-offset:3px}
+.bar em{font-style:normal;color:var(--mute)}
+.note{color:var(--mute);font-size:.85rem;margin-top:2rem}
+.toast{position:fixed;left:50%;bottom:1.4rem;transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:.6rem 1.1rem;border-radius:4px;opacity:0;pointer-events:none;transition:.25s;font-weight:600}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (max-width:900px){
+  .gate{grid-template-columns:1fr;gap:2rem;align-content:center}.gate-mark svg{width:180px}
+  .main{grid-template-columns:1fr}.figs{grid-template-columns:repeat(2,1fr)}
+  .fig:nth-child(3){border-left:0;padding-left:0}.fig:nth-child(n+3){border-top:1px solid var(--line)}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.gate-mark svg *{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<section class="gate" id="gate">
+  <div class="gate-mark">
+    <svg viewBox="0 0 264 214" role="img" aria-label="Oltera Language Studio emblem"><rect x="1" y="1" width="262" height="212" rx="5" pathLength="1"/><circle cx="132" cy="107" r="106" pathLength="1"/><path d="M132 1 L238 107 L132 213 L26 107 Z" pathLength="1"/><circle cx="132" cy="107" r="37" pathLength="1"/><path d="M1 107 H26 M238 107 H263" pathLength="1"/></svg>
+    <div><b>OLTERA</b><br><span>Language Studio</span></div>
+  </div>
+  <form id="login" novalidate autocomplete="off">
+    <h1>Admin sign in</h1>
+    <p class="s">Enter the admin token to see enquiries and activity from the Oltera website.</p>
+    <div class="row"><label for="srv">Enquiry script address</label><input id="srv" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/.../exec" spellcheck="false"></div>
+    <div class="row"><label for="tok">Admin token</label><div class="pw"><input id="tok" type="password" autocomplete="current-password" spellcheck="false"><button type="button" id="eye" aria-label="Show token">Show</button></div></div>
+    <button class="btn solid" id="go" type="submit">Sign in</button>
+    <p class="msg" id="gmsg" role="alert" aria-live="assertive"></p>
+    <details class="help"><summary>Where do I find these?</summary><p>The address is the web app URL you get when you deploy the Google Apps Script (it ends in <code>/exec</code>). The token is the <code>ADMIN_TOKEN</code> you set inside that script. Google checks the token on every request, so this page shows nothing without it.</p></details>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <span class="brand">OLTERA<small>Admin</small></span>
+    <span class="live" id="live" aria-live="polite"></span>
+    <button class="btn" id="refresh" type="button">Refresh</button>
+    <button class="btn" id="csv" type="button">Download CSV</button>
+    <button class="btn" id="out" type="button">Sign out</button>
+  </header>
+  <div class="wrap">
+    <div class="tabs" role="group" aria-label="View">
+      <button type="button" id="tEnq" data-tab="enq" aria-pressed="true">Enquiries<em id="nEnq"></em></button>
+      <button type="button" id="tAct" data-tab="act" aria-pressed="false">Activity<em id="nAct"></em></button>
+    </div>
+    <div class="figs" id="figs"></div>
+    <div class="main">
+      <div>
+        <div class="tools">
+          <div class="grow"><label class="vh" for="q">Search</label><input id="q" type="search" placeholder="Search"></div>
+          <div class="sel"><label class="vh" for="cf">Filter</label><select id="cf"></select></div>
+        </div>
+        <p class="count" id="count" aria-live="polite"></p>
+        <div class="tw"><table id="tbl"></table></div>
+      </div>
+      <aside class="side" id="side"></aside>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){return document.getElementById(id)};
+  var esc = function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+  var unq = function(s){return String(s==null?"":s).replace(/^'/,"")};
+  var RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var store = {
+    get:function(s,k){try{return (s==="s"?sessionStorage:localStorage).getItem(k)}catch(e){return null}},
+    set:function(s,k,v){try{(s==="s"?sessionStorage:localStorage).setItem(k,v)}catch(e){}},
+    del:function(s,k){try{(s==="s"?sessionStorage:localStorage).removeItem(k)}catch(e){}}
+  };
+  var LABEL = {test:"Mock test",plan:"Plan",destination:"Destination",visa:"Visa checklist",finder:"Country finder",compare:"Comparison",essay:"Writing check"};
+  var base="", token="", rows=[], events=[], tab="enq", sortK="at", sortD=-1, seenBefore=0;
+  var poll, idle, fails=0, lockUntil=0, IDLE_MS=15*60*1000, POLL_MS=30*1000;
+
+  var saved = store.get("l","olt_admin_srv");
+  $("srv").value = saved || "";
+  $("eye").onclick = function(){var t=$("tok"),s=t.type==="password";t.type=s?"text":"password";this.textContent=s?"Hide":"Show";this.setAttribute("aria-label",s?"Hide token":"Show token")};
+  function gmsg(t,c){var m=$("gmsg");m.textContent=t||"";m.className="msg "+(c||"")}
+  function toast(t){var el=$("toast");el.textContent=t;el.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(function(){el.classList.remove("on")},1800)}
+  function cleanBase(u){return String(u||"").trim().replace(/\/+$/,"")}
+
+  /* ---------- talk to the Google Apps Script ---------- */
+  function load(){
+    // text/plain keeps this a simple request, so no CORS preflight (Apps Script cannot answer one)
+    return fetch(base,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"list",token:token}),cache:"no-store"})
+      .then(function(r){if(!r.ok){var e=new Error("http");e.code=r.status;throw e}return r.json()})
+      .then(function(j){
+        if(j&&j.error==="unauthorised"){var e=new Error("auth");e.code=401;throw e}
+        if(!j||!j.ok||!Array.isArray(j.rows))throw new Error("shape");
+        rows=j.rows.map(function(x){return{name:unq(x.name),email:unq(x.email),country:unq(x.country),plan:unq(x.plan),vid:String(x.vid||""),at:x.at||"",t:Date.parse(x.at)||0}});
+        events=(j.events||[]).map(function(x){return{vid:String(x.vid||""),type:String(x.type||""),data:x.data||{},at:x.at||"",t:Date.parse(x.at)||0}});
+      });
+  }
+  $("login").addEventListener("submit",function(e){
+    e.preventDefault();
+    var wait=Math.ceil((lockUntil-Date.now())/1000);
+    if(wait>0)return gmsg("Too many wrong attempts. Try again in "+wait+" seconds.","err");
+    base=cleanBase($("srv").value);token=$("tok").value.trim();
+    if(!/^https:\/\/script\.google\.com\//.test(base))return gmsg("Enter the Apps Script web app address (it starts with https://script.google.com/).","err");
+    if(!token)return gmsg("Enter the admin token.","err");
+    var btn=$("go");btn.disabled=true;gmsg("Checking...","");
+    load().then(function(){fails=0;store.set("l","olt_admin_srv",base);store.set("s","olt_admin_tok",token);enter()}).catch(function(err){
+      if(err.code===401){fails++;if(fails>=5){lockUntil=Date.now()+60000;fails=0;gmsg("Wrong token. Locked for 60 seconds.","err")}else gmsg("Wrong token. "+(5-fails)+" attempts left.","err")}
+      else if(err.code)gmsg("Google answered with error "+err.code+". Check that the script is deployed with access set to Anyone.","err");
+      else gmsg("Could not reach the script. Check the address ends in /exec, and that the script is deployed with access set to Anyone.","err");
+      token="";
+    }).then(function(){btn.disabled=false});
+  });
+
+  function enter(){
+    seenBefore=parseInt(store.get("l","olt_admin_seen")||"0",10)||0;
+    $("tok").value="";$("gate").hidden=true;$("app").hidden=false;
+    setTab("enq",true);
+    var newest=rows.reduce(function(m,r){return Math.max(m,r.t)},0);
+    if(newest)store.set("l","olt_admin_seen",String(newest));
+    clearInterval(poll);poll=setInterval(refresh,POLL_MS);bumpIdle();window.scrollTo(0,0);
+  }
+  function leave(msg){
+    clearInterval(poll);clearTimeout(idle);token="";rows=[];events=[];
+    store.del("s","olt_admin_tok");
+    $("app").hidden=true;$("gate").hidden=false;$("q").value="";
+    gmsg(msg||"",msg?"ok":"");$("tok").focus();
+  }
+  function bumpIdle(){clearTimeout(idle);idle=setTimeout(function(){leave("You were signed out after 15 minutes of inactivity.")},IDLE_MS)}
+  ["click","keydown","mousemove","touchstart","scroll"].forEach(function(ev){addEventListener(ev,function(){if(token)bumpIdle()},{passive:true})});
+  $("out").onclick=function(){leave("Signed out.")};
+  function refresh(){
+    if(!token)return;var b=$("refresh");b.disabled=true;
+    load().then(function(){render(false);$("live").textContent="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})})
+      .catch(function(err){if(err.code===401)leave("The token is no longer accepted. Sign in again.");else $("live").textContent="Could not refresh. Retrying."})
+      .then(function(){b.disabled=false});
+  }
+  $("refresh").onclick=refresh;
+
+  /* ---------- helpers ---------- */
+  function fmtDate(t){return t?new Date(t).toLocaleString([],{day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}):""}
+  function count(list,keyFn){var m={};list.forEach(function(x){var k=keyFn(x);if(k)m[k]=(m[k]||0)+1});return Object.keys(m).map(function(k){return[k,m[k]]}).sort(function(a,b){return b[1]-a[1]||a[0].localeCompare(b[0])})}
+  function barsHtml(list,clickable,key){
+    if(!list.length)return '<p class="note" style="margin:0">Nothing yet.</p>';
+    var max=list[0][1];
+    return list.map(function(p){return '<button type="button" class="bar'+(clickable?'':' plain')+'" '+(clickable?'data-'+key+'="'+esc(p[0])+'"':'tabindex="-1"')+'><span>'+esc(p[0])+'</span><em>'+p[1]+'</em><i><u style="width:'+Math.round(p[1]/max*100)+'%"></u></i></button>'}).join("");
+  }
+  function nameOf(vid){for(var i=0;i<rows.length;i++)if(rows[i].vid&&rows[i].vid===vid)return rows[i].name;return""}
+  function lastTest(vid){
+    if(!vid)return null;var b=null;
+    events.forEach(function(e){if(e.vid===vid&&e.type==="test"&&(!b||e.t>b.t))b=e});return b;
+  }
+  function detail(e){
+    var d=e.data||{};
+    switch(e.type){
+      case"test":return"Scored "+esc(d.score)+" out of "+esc(d.of||5)+", estimated band "+esc(d.band);
+      case"plan":return"Chose the "+esc(d.plan)+" plan";
+      case"destination":return"Viewed "+esc(d.country);
+      case"visa":return"Opened the visa checklist for "+esc(d.country);
+      case"finder":return"Field: "+esc(d.field)+". Band: "+esc(d.band);
+      case"compare":return esc(d.a)+" compared with "+esc(d.b);
+      case"essay":return esc(d.words)+" words, "+esc(d.met)+" of "+esc(d.of)+" checks met";
+      default:return esc(JSON.stringify(d));
+    }
+  }
+  function plain(e){return detail(e).replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;/g,"'")}
+
+  /* ---------- tabs ---------- */
+  function setTab(t,first){
+    tab=t;$("q").value="";
+    $("tEnq").setAttribute("aria-pressed",String(t==="enq"));$("tAct").setAttribute("aria-pressed",String(t==="act"));
+    $("q").placeholder=t==="enq"?"Search name, email, country or plan":"Search name, visitor, type or detail";
+    $("cf").value="";fillFilter();render(first);
+  }
+  document.querySelector(".tabs").addEventListener("click",function(e){var b=e.target.closest("button[data-tab]");if(b&&b.dataset.tab!==tab)setTab(b.dataset.tab)});
+  function fillFilter(){
+    var cur=$("cf").value,names,all;
+    if(tab==="enq"){var s={};rows.forEach(function(r){s[r.country||"Not chosen"]=1});names=Object.keys(s).sort();all="All countries";}
+    else{names=Object.keys(LABEL).filter(function(k){return events.some(function(e){return e.type===k})});all="All activity";}
+    $("cf").innerHTML='<option value="">'+all+'</option>'+names.map(function(n){return'<option value="'+esc(n)+'">'+esc(tab==="act"?LABEL[n]:n)+'</option>'}).join("");
+    if(names.indexOf(cur)>-1)$("cf").value=cur;
+  }
+
+  /* ---------- render ---------- */
+  function render(first){
+    fillFilter();
+    $("nEnq").textContent=rows.length;$("nAct").textContent=events.length;
+    return tab==="enq"?renderEnq(first):renderAct(first);
+  }
+  function figs(a){$("figs").innerHTML=a.map(function(f){return'<div class="fig"><b'+(f[2]?' class="sm"':'')+'>'+esc(f[0])+'</b><span>'+esc(f[1])+'</span></div>'}).join("")}
+  function animBars(first){if(first&&!RM)document.querySelectorAll(".bar i u").forEach(function(u){var w=u.style.width;u.style.width="0";requestAnimationFrame(function(){requestAnimationFrame(function(){u.style.width=w})})})}
+
+  function renderEnq(first){
+    var now=Date.now(),day=86400000,st=new Date();st.setHours(0,0,0,0);
+    var byC=count(rows,function(r){return r.country||"Not chosen"});
+    figs([[rows.length,"Total enquiries"],[rows.filter(function(r){return r.t>=st.getTime()}).length,"Today"],[rows.filter(function(r){return r.t>=now-7*day}).length,"Last 7 days"],[byC[0]?byC[0][0]:"None yet",byC[0]?"Most requested ("+byC[0][1]+")":"Most requested country",1]]);
+    var byP=count(rows,function(r){return r.plan});
+    $("side").innerHTML='<h2>Enquiries by country</h2><div id="bC">'+barsHtml(byC,true,"c")+'</div><h2>Plan chosen with enquiry</h2><div>'+barsHtml(byP,false)+'</div><p class="note">A dot marks enquiries that arrived since you last signed in. The list refreshes every 30 seconds, and you are signed out after 15 minutes without activity.</p>';
+    var q=$("q").value.trim().toLowerCase(),cf=$("cf").value;
+    var out=rows.filter(function(r){var c=r.country||"Not chosen";if(cf&&c!==cf)return false;return!q||(r.name+" "+r.email+" "+c+" "+r.plan).toLowerCase().indexOf(q)>-1});
+    out.sort(function(a,b){var x=sortK==="at"?a.t:String(a[sortK]).toLowerCase(),y=sortK==="at"?b.t:String(b[sortK]).toLowerCase();return(x<y?-1:x>y?1:0)*sortD});
+    var th=function(k,l){return'<th scope="col"><button type="button" data-k="'+k+'">'+l+' <span>'+(sortK===k?(sortD>0?"\u2191":"\u2193"):"")+'</span></button></th>'};
+    $("tbl").innerHTML='<thead><tr>'+th("at","Received")+th("name","Name")+th("email","Email")+th("country","Country")+th("plan","Plan")+'<th scope="col">Latest test</th><th scope="col"><span class="vh">Actions</span></th></tr></thead><tbody>'+
+      (out.length?out.map(function(r){
+        var isNew=seenBefore&&r.t>seenBefore,lt=lastTest(r.vid),n=events.filter(function(e){return r.vid&&e.vid===r.vid}).length;
+        return'<tr><td class="when">'+(isNew?'<span class="dot" title="New since your last visit"></span><span class="vh">New. </span>':'')+esc(fmtDate(r.t))+'</td><td>'+esc(r.name)+'</td><td>'+esc(r.email)+'</td><td>'+esc(r.country||"Not chosen")+'</td><td>'+(r.plan?'<span class="tag">'+esc(r.plan)+'</span>':'<span class="dim">None</span>')+'</td><td>'+(lt?esc(lt.data.score)+'/'+esc(lt.data.of||5)+', band '+esc(lt.data.band):'<span class="dim">Not taken</span>')+'</td><td class="act">'+(n?'<button type="button" data-vid="'+esc(r.vid)+'">Activity ('+n+')</button>':'')+'<button type="button" data-copy="'+esc(r.email)+'">Copy email</button><a href="mailto:'+esc(r.email)+'">Write</a></td></tr>';
+      }).join(""):'<tr><td colspan="7" class="empty">'+(rows.length?"No enquiries match your search.":"No enquiries yet. They appear here as soon as someone books counselling on the website.")+'</td></tr>')+'</tbody>';
+    $("count").textContent=rows.length?"Showing "+out.length+" of "+rows.length+(out.length===1?" enquiry":" enquiries"):"";
+    if(first)$("live").textContent="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+    animBars(first);
+  }
+
+  function renderAct(first){
+    var tests=events.filter(function(e){return e.type==="test"}),avg=tests.length?(tests.reduce(function(s,e){return s+Number(e.data.band||0)},0)/tests.length):0;
+    var plans=count(events.filter(function(e){return e.type==="plan"}),function(e){return e.data.plan});
+    var visitors={};events.forEach(function(e){visitors[e.vid]=1});
+    figs([[events.length,"Selections recorded"],[Object.keys(visitors).length,"Visitors"],[tests.length?avg.toFixed(1):"None yet","Average mock test band ("+tests.length+" taken)",!tests.length],[plans[0]?plans[0][0]:"None yet",plans[0]?"Most chosen plan ("+plans[0][1]+")":"Most chosen plan",1]]);
+    var dest=count(events.filter(function(e){return e.type==="destination"}),function(e){return e.data.country}).slice(0,8);
+    $("side").innerHTML='<h2>Plans chosen</h2><div>'+barsHtml(plans,false)+'</div><h2>Destinations viewed</h2><div>'+barsHtml(dest,false)+'</div><p class="note">Each row is something a visitor selected on the website. The writing box and chat messages are never recorded. Up to the latest 3,000 selections are shown.</p>';
+    var q=$("q").value.trim().toLowerCase(),cf=$("cf").value;
+    var out=events.filter(function(e){if(cf&&e.type!==cf)return false;return!q||(nameOf(e.vid)+" "+e.vid+" "+LABEL[e.type]+" "+plain(e)).toLowerCase().indexOf(q)>-1});
+    out.sort(function(a,b){return(b.t-a.t)*(sortK==="at"?sortD*-1:-1)});
+    var shown=out.slice(0,500);
+    $("tbl").innerHTML='<thead><tr><th scope="col"><button type="button" data-k="at">When <span>'+(sortD>0?"\u2191":"\u2193")+'</span></button></th><th scope="col">Visitor</th><th scope="col">Selection</th><th scope="col">Details</th></tr></thead><tbody>'+
+      (shown.length?shown.map(function(e){var n=nameOf(e.vid);
+        return'<tr><td class="when">'+esc(fmtDate(e.t))+'</td><td>'+(n?esc(n):'<span class="dim">Visitor '+esc(e.vid.slice(0,6))+'</span>')+'</td><td><span class="tag">'+esc(LABEL[e.type]||e.type)+'</span></td><td>'+detail(e)+'</td></tr>'}).join(""):'<tr><td colspan="4" class="empty">'+(events.length?"Nothing matches your search.":"No activity yet. Test scores, plan choices and other selections appear here as visitors make them.")+'</td></tr>')+'</tbody>';
+    $("count").textContent=events.length?"Showing "+shown.length+" of "+out.length+(out.length>500?" (first 500)":""):"";
+    if(first)$("live").textContent="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  }
+
+  $("q").addEventListener("input",function(){render(false)});
+  $("cf").addEventListener("change",function(){render(false)});
+  $("tbl").addEventListener("click",function(e){
+    var s=e.target.closest("button[data-k]");
+    if(s){var k=s.dataset.k;if(sortK===k)sortD=-sortD;else{sortK=k;sortD=k==="at"?-1:1}return render(false)}
+    var v=e.target.closest("button[data-vid]");
+    if(v){setTab("act");$("q").value=v.dataset.vid;return render(false)}
+    var c=e.target.closest("button[data-copy]");if(!c)return;
+    var val=c.dataset.copy;
+    (navigator.clipboard?navigator.clipboard.writeText(val):Promise.reject()).then(function(){toast("Email copied")},function(){
+      var t=document.createElement("textarea");t.value=val;document.body.appendChild(t);t.select();
+      try{document.execCommand("copy");toast("Email copied")}catch(x){toast("Copy failed")}t.remove();
+    });
+  });
+  $("side").addEventListener("click",function(e){var b=e.target.closest("button[data-c]");if(!b)return;$("cf").value=$("cf").value===b.dataset.c?"":b.dataset.c;render(false)});
+
+  /* ---------- CSV of the current tab (cells starting with = + - @ are neutralised for Excel) ---------- */
+  $("csv").onclick=function(){
+    var head,data;
+    if(tab==="enq"){head=["Received","Name","Email","Country","Plan","Latest test"];data=rows.slice().sort(function(a,b){return b.t-a.t}).map(function(r){var lt=lastTest(r.vid);return[r.at,r.name,r.email,r.country,r.plan,lt?lt.data.score+"/"+(lt.data.of||5)+" band "+lt.data.band:""]})}
+    else{head=["When","Visitor","Selection","Details"];data=events.slice().sort(function(a,b){return b.t-a.t}).map(function(e){return[e.at,nameOf(e.vid)||"Visitor "+e.vid.slice(0,6),LABEL[e.type]||e.type,plain(e)]})}
+    if(!data.length)return toast("Nothing to download yet");
+    var cell=function(s){s=String(s==null?"":s);if(/^[=+\-@\t\r]/.test(s))s="'"+s;return'"'+s.replace(/"/g,'""')+'"'};
+    var blob=new Blob(["\ufeff"+[head].concat(data).map(function(r){return r.map(cell).join(",")}).join("\r\n")],{type:"text/csv;charset=utf-8"});
+    var a=document.createElement("a");a.href=URL.createObjectURL(blob);
+    a.download="oltera-"+(tab==="enq"?"enquiries":"activity")+"-"+new Date().toISOString().slice(0,10)+".csv";
+    document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(a.href)},1000);
+  };
+
+  var t0=store.get("s","olt_admin_tok");
+  if(t0&&saved){base=cleanBase(saved);token=t0;load().then(enter).catch(function(){token="";store.del("s","olt_admin_tok")})}
+})();
+</script>
+</body>
+</html>
