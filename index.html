@@ -10,6 +10,7 @@
 <meta name="color-scheme" content="light dark">
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/contact.css">
 
   <meta name="google-site-verification" content="R-SHiugMUBb0_GUMqrOgNwIX_E6ATP0AJtIbn6kDp38" />
 </head>
@@ -73,22 +74,48 @@
 
 <section class="visa" id="visa"><div class="w">
 <h2>Visa checklist</h2><p class="sub">Choose a country to see the main documents we help you prepare. Tick items off as you go.</p>
-<label class="l" for="vc">Country</label><select id="vc"></select><ul class="checks tick" id="vlist"></ul></div></section>
+<label class="l" for="vc">Country</label><select id="vc"></select><ul class="checks tick" id="vlist"></ul>
+<p class="note-contact">Not sure which documents apply to you? <a href="mailto:info@yourdomain.com?subject=Visa%20question">Email our visa team</a> or <a href="tel:+910000000000">call +91 00000 00000</a>.</p></div></section>
 
 <section class="stories" id="stories"><div class="w"><h2>What students say</h2><p class="sub">Sample text. Replace with feedback from your own students.</p><div class="sgrid" id="sgrid"></div></div></section>
 
-<section class="faq" id="faq"><div class="w"><h2>Questions</h2><div id="faqs"></div></div></section>
+<section class="faq" id="faq"><div class="w"><h2>Questions</h2><div id="faqs"></div>
+<p class="note-contact">Still have a question? <a href="mailto:info@yourdomain.com?subject=Question%20about%20Oltera">info@yourdomain.com</a> or <a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer">message us on WhatsApp</a>.</p></div></section>
 
 <section class="join" id="counselling"><div class="w jg">
-<div><h2>Get free counselling today.</h2><p class="sub">Tell us where you want to study. We reply with a time to talk.</p></div>
+<div><h2>Get free counselling today.</h2><p class="sub">Tell us where you want to study. We reply with a time to talk.</p>
+<ul class="direct" aria-label="Contact Oltera directly">
+<li><span class="l">Call</span><a href="tel:+910000000000">+91 00000 00000</a></li>
+<li><span class="l">WhatsApp</span><a href="https://wa.me/910000000000?text=Hello%20Oltera%2C%20I%20would%20like%20free%20counselling." target="_blank" rel="noopener noreferrer">Message us</a></li>
+<li><span class="l">Email</span><a href="mailto:info@yourdomain.com?subject=Free%20counselling%20enquiry">info@yourdomain.com</a></li>
+<li><span class="l">Visit</span><span>Your street address, City, State, PIN</span></li>
+<li><span class="l">Hours</span><span>Mon–Sat, 9:00 am – 6:00 pm</span></li>
+</ul></div>
 <form id="f" novalidate><p><label class="l" for="n">Name</label><input type="text" id="n" autocomplete="name"></p>
 <p><label class="l" for="e">Email</label><input type="email" id="e" autocomplete="email"></p>
 <p><label class="l" for="c">Country you are interested in</label><select id="c"></select></p>
 <button type="button" class="solid" id="go">Book my session</button><p id="msg" aria-live="polite"></p><p style="font-size:.85em;opacity:.7;margin:.8rem 0 0">We also note the test scores, plan and countries you select on this site, so your counsellor can help you better. We do not record what you type in the writing box or the chat.</p></form></div></section>
 </main>
-<footer><div class="w"><b>OLTERA LANGUAGE STUDIO</b><span>Language that opens doors</span>
-<p class="credit">Credits: website designed and built by <a href="https://github.com/mortifer-inferno" target="_blank" rel="noopener noreferrer">mortifer-inferno ↗</a></p></div></footer>
+<footer><div class="w">
+<div class="f-top"><div class="f-brand"><b>OLTERA LANGUAGE STUDIO</b><span>Language that opens doors</span></div>
+<address class="f-contact">
+<div><span class="l">Phone</span><a href="tel:+910000000000">+91 00000 00000</a></div>
+<div><span class="l">WhatsApp</span><a href="https://wa.me/910000000000" target="_blank" rel="noopener noreferrer">+91 00000 00000</a></div>
+<div><span class="l">Email</span><a href="mailto:info@yourdomain.com">info@yourdomain.com</a></div>
+<div><span class="l">Address</span><span>Your street address,<br>City, State, PIN</span></div>
+<div><span class="l">Hours</span><span>Mon–Sat, 9:00 am – 6:00 pm</span></div>
+</address>
+<nav class="f-links" aria-label="Footer">
+<a href="#destinations">Destinations</a><a href="#ielts">IELTS</a><a href="#visa">Visa checklist</a><a href="#faq">Questions</a><a href="#counselling">Free counselling</a>
+</nav></div>
+<div class="f-social" aria-label="Social links">
+<a href="https://instagram.com/yourhandle" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+<a href="https://facebook.com/yourpage" target="_blank" rel="noopener noreferrer">Facebook ↗</a>
+<a href="https://youtube.com/@yourchannel" target="_blank" rel="noopener noreferrer">YouTube ↗</a>
+</div>
+<p class="credit">© <span id="yr">2026</span> Oltera Language Studio. Credits: website designed and built by <a href="https://github.com/mortifer-inferno" target="_blank" rel="noopener noreferrer">mortifer-inferno ↗</a></p></div></footer>
 
+<script>document.getElementById("yr").textContent=new Date().getFullYear();</script>
 <script src="js/loader.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
